@@ -1,0 +1,43 @@
+ 
+ name: Salesforce Deploy  
+
+on:  
+  push:  
+    branches:  
+      - main  # Change this to your deployment branch  
+
+jobs:  
+  deploy:  
+    runs-on: ubuntu-latest  
+
+    steps:  
+      - name: Checkout code  
+        uses: actions/checkout@v2  
+
+      - name: Install Salesforce CLI  
+        run: |  
+          echo "Installing Salesforce CLI..."  
+          curl -sL https://developer.salesforce.com/media/salesforce-cli/sfdx-install.sh | bash  
+
+      - name: Authenticate to Salesforce  
+        env:  
+          SFDX_CLIENT_ID: ${{ secrets.SF_CLIENT_ID }}  
+          SFDX_CLIENT_SECRET: ${{ secrets.SF_CLIENT_SECRET }}  
+          SFDX_USERNAME: ${{ secrets.SF_USERNAME }}  
+          SFDX_PASSWORD: ${{ secrets.SF_PASSWORD }}  
+          SFDX_LOGIN_URL: ${{ secrets.SF_LOGIN_URL }}  
+          SFDX_KEY_FILE: ${{ secrets1.SF_KEY_FILE }}  
+        run: |  
+          echo "Authenticating to Salesforce..."  
+          echo "$SFDX_KEY_FILE" > keyfile.key  # Create a key file from the secret  
+          sfdx force:auth:jwt:grant \
+            --clientid $SFDX_CLIENT_ID \
+            --jwtkeyfile keyfile.key \
+            --username $SFDX_USERNAME \
+            --setdefaultdevhubusername \
+            --setdefaultusername  
+
+      - name: Deploy to Salesforce  
+        run: |  
+          echo "Deploying to Salesforce..."  
+          sfdx force:source:deploy -p force-app/main/default -w 10  # Adjust the path based on your folder structure  
