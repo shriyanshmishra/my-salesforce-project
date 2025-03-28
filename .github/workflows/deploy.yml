@@ -1,5 +1,5 @@
- 
- name: Salesforce Deploy  
+# .github/workflows/deploy.yml  
+name: Salesforce Deploy  
 
 on:  
   push:  
@@ -26,7 +26,7 @@ jobs:
           SFDX_USERNAME: ${{ secrets.SF_USERNAME }}  
           SFDX_PASSWORD: ${{ secrets.SF_PASSWORD }}  
           SFDX_LOGIN_URL: ${{ secrets.SF_LOGIN_URL }}  
-          SFDX_KEY_FILE: ${{ secrets1.SF_KEY_FILE }}  
+          SFDX_KEY_FILE: ${{ secrets.SF_KEY_FILE }}  
         run: |  
           echo "Authenticating to Salesforce..."  
           echo "$SFDX_KEY_FILE" > keyfile.key  # Create a key file from the secret  
