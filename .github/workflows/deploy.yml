@@ -4,7 +4,7 @@ name: Salesforce Deploy
 on:  
   push:  
     branches:  
-      - main  # Change this to your deployment branch  
+      - main  
 
 jobs:  
   deploy:  
